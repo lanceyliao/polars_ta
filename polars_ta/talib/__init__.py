@@ -109,7 +109,7 @@ Outputs:
     return struct(f0=high, f1=low).map_batches(lambda xx: batches_i2_o1(struct_to_numpy(xx, 2, dtype=float), _ta.DIV), return_dtype=Float64)
 
 
-def MAX(close: Expr, timeperiod: float = 30.0) -> Expr:  # ['real']
+def MAX(close: Expr, timeperiod: int = 30) -> Expr:  # ['real']
     """MAX(ndarray real, int timeperiod=-0x80000000)
 
 MAX(real[, timeperiod=?])
@@ -125,7 +125,7 @@ Outputs:
     return close.map_batches(lambda x1: batches_i1_o1(x1.to_numpy().astype(float), _ta.MAX, timeperiod), return_dtype=Float64)
 
 
-def MAXINDEX(close: Expr, timeperiod: float = 30.0) -> Expr:  # ['integer']
+def MAXINDEX(close: Expr, timeperiod: int = 30) -> Expr:  # ['integer']
     """MAXINDEX(ndarray real, int timeperiod=-0x80000000)
 
 MAXINDEX(real[, timeperiod=?])
@@ -141,7 +141,7 @@ Outputs:
     return close.map_batches(lambda x1: batches_i1_o1(x1.to_numpy().astype(float), _ta.MAXINDEX, timeperiod), return_dtype=Int32)
 
 
-def MIN(close: Expr, timeperiod: float = 30.0) -> Expr:  # ['real']
+def MIN(close: Expr, timeperiod: int = 30) -> Expr:  # ['real']
     """MIN(ndarray real, int timeperiod=-0x80000000)
 
 MIN(real[, timeperiod=?])
@@ -157,7 +157,7 @@ Outputs:
     return close.map_batches(lambda x1: batches_i1_o1(x1.to_numpy().astype(float), _ta.MIN, timeperiod), return_dtype=Float64)
 
 
-def MININDEX(close: Expr, timeperiod: float = 30.0) -> Expr:  # ['integer']
+def MININDEX(close: Expr, timeperiod: int = 30) -> Expr:  # ['integer']
     """MININDEX(ndarray real, int timeperiod=-0x80000000)
 
 MININDEX(real[, timeperiod=?])
@@ -173,7 +173,7 @@ Outputs:
     return close.map_batches(lambda x1: batches_i1_o1(x1.to_numpy().astype(float), _ta.MININDEX, timeperiod), return_dtype=Int32)
 
 
-def MINMAX(close: Expr, timeperiod: float = 30.0) -> Expr:  # ['min', 'max']
+def MINMAX(close: Expr, timeperiod: int = 30) -> Expr:  # ['min', 'max']
     """MINMAX(ndarray real, int timeperiod=-0x80000000)
 
 MINMAX(real[, timeperiod=?])
@@ -191,7 +191,7 @@ Outputs:
     return close.map_batches(lambda x1: batches_i1_o2(x1.to_numpy().astype(float), _ta.MINMAX, timeperiod), return_dtype=dtype)
 
 
-def MINMAXINDEX(close: Expr, timeperiod: float = 30.0) -> Expr:  # ['minidx', 'maxidx']
+def MINMAXINDEX(close: Expr, timeperiod: int = 30) -> Expr:  # ['minidx', 'maxidx']
     """MINMAXINDEX(ndarray real, int timeperiod=-0x80000000)
 
 MINMAXINDEX(real[, timeperiod=?])
@@ -239,7 +239,7 @@ Outputs:
     return struct(f0=high, f1=low).map_batches(lambda xx: batches_i2_o1(struct_to_numpy(xx, 2, dtype=float), _ta.SUB), return_dtype=Float64)
 
 
-def SUM(close: Expr, timeperiod: float = 30.0) -> Expr:  # ['real']
+def SUM(close: Expr, timeperiod: int = 30) -> Expr:  # ['real']
     """SUM(ndarray real, int timeperiod=-0x80000000)
 
 SUM(real[, timeperiod=?])
@@ -465,7 +465,7 @@ Outputs:
     return close.map_batches(lambda x1: batches_i1_o1(x1.to_numpy().astype(float), _ta.TANH), return_dtype=Float64)
 
 
-def ADX(high: Expr, low: Expr, close: Expr, timeperiod: float = 14.0) -> Expr:  # ['real']
+def ADX(high: Expr, low: Expr, close: Expr, timeperiod: int = 14) -> Expr:  # ['real']
     """ADX(ndarray high, ndarray low, ndarray close, int timeperiod=-0x80000000)
 
 ADX(high, low, close[, timeperiod=?])
@@ -481,7 +481,7 @@ Outputs:
     return struct(f0=high, f1=low, f2=close).map_batches(lambda xx: batches_i2_o1(struct_to_numpy(xx, 3, dtype=float), _ta.ADX, timeperiod), return_dtype=Float64)
 
 
-def ADXR(high: Expr, low: Expr, close: Expr, timeperiod: float = 14.0) -> Expr:  # ['real']
+def ADXR(high: Expr, low: Expr, close: Expr, timeperiod: int = 14) -> Expr:  # ['real']
     """ADXR(ndarray high, ndarray low, ndarray close, int timeperiod=-0x80000000)
 
 ADXR(high, low, close[, timeperiod=?])
@@ -497,7 +497,7 @@ Outputs:
     return struct(f0=high, f1=low, f2=close).map_batches(lambda xx: batches_i2_o1(struct_to_numpy(xx, 3, dtype=float), _ta.ADXR, timeperiod), return_dtype=Float64)
 
 
-def APO(close: Expr, fastperiod: float = 12.0, slowperiod: float = 26.0, matype: float = 0.0) -> Expr:  # ['real']
+def APO(close: Expr, fastperiod: int = 12, slowperiod: int = 26, matype: int = 0) -> Expr:  # ['real']
     """APO(ndarray real, int fastperiod=-0x80000000, int slowperiod=-0x80000000, int matype=0)
 
 APO(real[, fastperiod=?, slowperiod=?, matype=?])
@@ -515,7 +515,7 @@ Outputs:
     return close.map_batches(lambda x1: batches_i1_o1(x1.to_numpy().astype(float), _ta.APO, fastperiod, slowperiod, matype), return_dtype=Float64)
 
 
-def AROON(high: Expr, low: Expr, timeperiod: float = 14.0) -> Expr:  # ['aroondown', 'aroonup']
+def AROON(high: Expr, low: Expr, timeperiod: int = 14) -> Expr:  # ['aroondown', 'aroonup']
     """AROON(ndarray high, ndarray low, int timeperiod=-0x80000000)
 
 AROON(high, low[, timeperiod=?])
@@ -533,7 +533,7 @@ Outputs:
     return struct(f0=high, f1=low).map_batches(lambda xx: batches_i2_o2(struct_to_numpy(xx, 2, dtype=float), _ta.AROON, timeperiod), return_dtype=dtype)
 
 
-def AROONOSC(high: Expr, low: Expr, timeperiod: float = 14.0) -> Expr:  # ['real']
+def AROONOSC(high: Expr, low: Expr, timeperiod: int = 14) -> Expr:  # ['real']
     """AROONOSC(ndarray high, ndarray low, int timeperiod=-0x80000000)
 
 AROONOSC(high, low[, timeperiod=?])
@@ -563,7 +563,7 @@ Outputs:
     return struct(f0=open, f1=high, f2=low, f3=close).map_batches(lambda xx: batches_i2_o1(struct_to_numpy(xx, 4, dtype=float), _ta.BOP), return_dtype=Float64)
 
 
-def CCI(high: Expr, low: Expr, close: Expr, timeperiod: float = 14.0) -> Expr:  # ['real']
+def CCI(high: Expr, low: Expr, close: Expr, timeperiod: int = 14) -> Expr:  # ['real']
     """CCI(ndarray high, ndarray low, ndarray close, int timeperiod=-0x80000000)
 
 CCI(high, low, close[, timeperiod=?])
@@ -579,7 +579,7 @@ Outputs:
     return struct(f0=high, f1=low, f2=close).map_batches(lambda xx: batches_i2_o1(struct_to_numpy(xx, 3, dtype=float), _ta.CCI, timeperiod), return_dtype=Float64)
 
 
-def CMO(close: Expr, timeperiod: float = 14.0) -> Expr:  # ['real']
+def CMO(close: Expr, timeperiod: int = 14) -> Expr:  # ['real']
     """CMO(ndarray real, int timeperiod=-0x80000000)
 
 CMO(real[, timeperiod=?])
@@ -595,7 +595,7 @@ Outputs:
     return close.map_batches(lambda x1: batches_i1_o1(x1.to_numpy().astype(float), _ta.CMO, timeperiod), return_dtype=Float64)
 
 
-def DX(high: Expr, low: Expr, close: Expr, timeperiod: float = 14.0) -> Expr:  # ['real']
+def DX(high: Expr, low: Expr, close: Expr, timeperiod: int = 14) -> Expr:  # ['real']
     """DX(ndarray high, ndarray low, ndarray close, int timeperiod=-0x80000000)
 
 DX(high, low, close[, timeperiod=?])
@@ -611,7 +611,23 @@ Outputs:
     return struct(f0=high, f1=low, f2=close).map_batches(lambda xx: batches_i2_o1(struct_to_numpy(xx, 3, dtype=float), _ta.DX, timeperiod), return_dtype=Float64)
 
 
-def MACD(close: Expr, fastperiod: float = 12.0, slowperiod: float = 26.0, signalperiod: float = 9.0) -> Expr:  # ['macd', 'macdsignal', 'macdhist']
+def IMI(open: Expr, close: Expr, timeperiod: int = 14) -> Expr:  # ['real']
+    """IMI(ndarray open, ndarray close, int timeperiod=-0x80000000)
+
+IMI(open, close[, timeperiod=?])
+
+Intraday Momentum Index (Momentum Indicators)
+
+Inputs:
+    prices: ['open', 'close']
+Parameters:
+    timeperiod: 14
+Outputs:
+    real"""
+    return struct(f0=open, f1=close).map_batches(lambda xx: batches_i2_o1(struct_to_numpy(xx, 2, dtype=float), _ta.IMI, timeperiod), return_dtype=Float64)
+
+
+def MACD(close: Expr, fastperiod: int = 12, slowperiod: int = 26, signalperiod: int = 9) -> Expr:  # ['macd', 'macdsignal', 'macdhist']
     """MACD(ndarray real, int fastperiod=-0x80000000, int slowperiod=-0x80000000, int signalperiod=-0x80000000)
 
 MACD(real[, fastperiod=?, slowperiod=?, signalperiod=?])
@@ -632,7 +648,7 @@ Outputs:
     return close.map_batches(lambda x1: batches_i1_o2(x1.to_numpy().astype(float), _ta.MACD, fastperiod, slowperiod, signalperiod), return_dtype=dtype)
 
 
-def MACDEXT(close: Expr, fastperiod: float = 12.0, fastmatype: float = 0.0, slowperiod: float = 26.0, slowmatype: float = 0.0, signalperiod: float = 9.0, signalmatype: float = 0.0) -> Expr:  # ['macd', 'macdsignal', 'macdhist']
+def MACDEXT(close: Expr, fastperiod: int = 12, fastmatype: int = 0, slowperiod: int = 26, slowmatype: int = 0, signalperiod: int = 9, signalmatype: int = 0) -> Expr:  # ['macd', 'macdsignal', 'macdhist']
     """MACDEXT(ndarray real, int fastperiod=-0x80000000, int fastmatype=0, int slowperiod=-0x80000000, int slowmatype=0, int signalperiod=-0x80000000, int signalmatype=0)
 
 MACDEXT(real[, fastperiod=?, fastmatype=?, slowperiod=?, slowmatype=?, signalperiod=?, signalmatype=?])
@@ -656,7 +672,7 @@ Outputs:
     return close.map_batches(lambda x1: batches_i1_o2(x1.to_numpy().astype(float), _ta.MACDEXT, fastperiod, fastmatype, slowperiod, slowmatype, signalperiod, signalmatype), return_dtype=dtype)
 
 
-def MACDFIX(close: Expr, signalperiod: float = 9.0) -> Expr:  # ['macd', 'macdsignal', 'macdhist']
+def MACDFIX(close: Expr, signalperiod: int = 9) -> Expr:  # ['macd', 'macdsignal', 'macdhist']
     """MACDFIX(ndarray real, int signalperiod=-0x80000000)
 
 MACDFIX(real[, signalperiod=?])
@@ -675,7 +691,7 @@ Outputs:
     return close.map_batches(lambda x1: batches_i1_o2(x1.to_numpy().astype(float), _ta.MACDFIX, signalperiod), return_dtype=dtype)
 
 
-def MFI(high: Expr, low: Expr, close: Expr, volume: Expr, timeperiod: float = 14.0) -> Expr:  # ['real']
+def MFI(high: Expr, low: Expr, close: Expr, volume: Expr, timeperiod: int = 14) -> Expr:  # ['real']
     """MFI(ndarray high, ndarray low, ndarray close, ndarray volume, int timeperiod=-0x80000000)
 
 MFI(high, low, close, volume[, timeperiod=?])
@@ -691,7 +707,7 @@ Outputs:
     return struct(f0=high, f1=low, f2=close, f3=volume).map_batches(lambda xx: batches_i2_o1(struct_to_numpy(xx, 4, dtype=float), _ta.MFI, timeperiod), return_dtype=Float64)
 
 
-def MINUS_DI(high: Expr, low: Expr, close: Expr, timeperiod: float = 14.0) -> Expr:  # ['real']
+def MINUS_DI(high: Expr, low: Expr, close: Expr, timeperiod: int = 14) -> Expr:  # ['real']
     """MINUS_DI(ndarray high, ndarray low, ndarray close, int timeperiod=-0x80000000)
 
 MINUS_DI(high, low, close[, timeperiod=?])
@@ -707,7 +723,7 @@ Outputs:
     return struct(f0=high, f1=low, f2=close).map_batches(lambda xx: batches_i2_o1(struct_to_numpy(xx, 3, dtype=float), _ta.MINUS_DI, timeperiod), return_dtype=Float64)
 
 
-def MINUS_DM(high: Expr, low: Expr, timeperiod: float = 14.0) -> Expr:  # ['real']
+def MINUS_DM(high: Expr, low: Expr, timeperiod: int = 14) -> Expr:  # ['real']
     """MINUS_DM(ndarray high, ndarray low, int timeperiod=-0x80000000)
 
 MINUS_DM(high, low[, timeperiod=?])
@@ -723,7 +739,7 @@ Outputs:
     return struct(f0=high, f1=low).map_batches(lambda xx: batches_i2_o1(struct_to_numpy(xx, 2, dtype=float), _ta.MINUS_DM, timeperiod), return_dtype=Float64)
 
 
-def MOM(close: Expr, timeperiod: float = 10.0) -> Expr:  # ['real']
+def MOM(close: Expr, timeperiod: int = 10) -> Expr:  # ['real']
     """MOM(ndarray real, int timeperiod=-0x80000000)
 
 MOM(real[, timeperiod=?])
@@ -739,7 +755,7 @@ Outputs:
     return close.map_batches(lambda x1: batches_i1_o1(x1.to_numpy().astype(float), _ta.MOM, timeperiod), return_dtype=Float64)
 
 
-def PLUS_DI(high: Expr, low: Expr, close: Expr, timeperiod: float = 14.0) -> Expr:  # ['real']
+def PLUS_DI(high: Expr, low: Expr, close: Expr, timeperiod: int = 14) -> Expr:  # ['real']
     """PLUS_DI(ndarray high, ndarray low, ndarray close, int timeperiod=-0x80000000)
 
 PLUS_DI(high, low, close[, timeperiod=?])
@@ -755,7 +771,7 @@ Outputs:
     return struct(f0=high, f1=low, f2=close).map_batches(lambda xx: batches_i2_o1(struct_to_numpy(xx, 3, dtype=float), _ta.PLUS_DI, timeperiod), return_dtype=Float64)
 
 
-def PLUS_DM(high: Expr, low: Expr, timeperiod: float = 14.0) -> Expr:  # ['real']
+def PLUS_DM(high: Expr, low: Expr, timeperiod: int = 14) -> Expr:  # ['real']
     """PLUS_DM(ndarray high, ndarray low, int timeperiod=-0x80000000)
 
 PLUS_DM(high, low[, timeperiod=?])
@@ -771,7 +787,7 @@ Outputs:
     return struct(f0=high, f1=low).map_batches(lambda xx: batches_i2_o1(struct_to_numpy(xx, 2, dtype=float), _ta.PLUS_DM, timeperiod), return_dtype=Float64)
 
 
-def PPO(close: Expr, fastperiod: float = 12.0, slowperiod: float = 26.0, matype: float = 0.0) -> Expr:  # ['real']
+def PPO(close: Expr, fastperiod: int = 12, slowperiod: int = 26, matype: int = 0) -> Expr:  # ['real']
     """PPO(ndarray real, int fastperiod=-0x80000000, int slowperiod=-0x80000000, int matype=0)
 
 PPO(real[, fastperiod=?, slowperiod=?, matype=?])
@@ -789,7 +805,7 @@ Outputs:
     return close.map_batches(lambda x1: batches_i1_o1(x1.to_numpy().astype(float), _ta.PPO, fastperiod, slowperiod, matype), return_dtype=Float64)
 
 
-def ROC(close: Expr, timeperiod: float = 10.0) -> Expr:  # ['real']
+def ROC(close: Expr, timeperiod: int = 10) -> Expr:  # ['real']
     """ROC(ndarray real, int timeperiod=-0x80000000)
 
 ROC(real[, timeperiod=?])
@@ -805,7 +821,7 @@ Outputs:
     return close.map_batches(lambda x1: batches_i1_o1(x1.to_numpy().astype(float), _ta.ROC, timeperiod), return_dtype=Float64)
 
 
-def ROCP(close: Expr, timeperiod: float = 10.0) -> Expr:  # ['real']
+def ROCP(close: Expr, timeperiod: int = 10) -> Expr:  # ['real']
     """ROCP(ndarray real, int timeperiod=-0x80000000)
 
 ROCP(real[, timeperiod=?])
@@ -821,7 +837,7 @@ Outputs:
     return close.map_batches(lambda x1: batches_i1_o1(x1.to_numpy().astype(float), _ta.ROCP, timeperiod), return_dtype=Float64)
 
 
-def ROCR(close: Expr, timeperiod: float = 10.0) -> Expr:  # ['real']
+def ROCR(close: Expr, timeperiod: int = 10) -> Expr:  # ['real']
     """ROCR(ndarray real, int timeperiod=-0x80000000)
 
 ROCR(real[, timeperiod=?])
@@ -837,7 +853,7 @@ Outputs:
     return close.map_batches(lambda x1: batches_i1_o1(x1.to_numpy().astype(float), _ta.ROCR, timeperiod), return_dtype=Float64)
 
 
-def ROCR100(close: Expr, timeperiod: float = 10.0) -> Expr:  # ['real']
+def ROCR100(close: Expr, timeperiod: int = 10) -> Expr:  # ['real']
     """ROCR100(ndarray real, int timeperiod=-0x80000000)
 
 ROCR100(real[, timeperiod=?])
@@ -853,7 +869,7 @@ Outputs:
     return close.map_batches(lambda x1: batches_i1_o1(x1.to_numpy().astype(float), _ta.ROCR100, timeperiod), return_dtype=Float64)
 
 
-def RSI(close: Expr, timeperiod: float = 14.0) -> Expr:  # ['real']
+def RSI(close: Expr, timeperiod: int = 14) -> Expr:  # ['real']
     """RSI(ndarray real, int timeperiod=-0x80000000)
 
 RSI(real[, timeperiod=?])
@@ -869,7 +885,7 @@ Outputs:
     return close.map_batches(lambda x1: batches_i1_o1(x1.to_numpy().astype(float), _ta.RSI, timeperiod), return_dtype=Float64)
 
 
-def STOCH(high: Expr, low: Expr, close: Expr, fastk_period: float = 5.0, slowk_period: float = 3.0, slowk_matype: float = 0.0, slowd_period: float = 3.0, slowd_matype: float = 0.0) -> Expr:  # ['slowk', 'slowd']
+def STOCH(high: Expr, low: Expr, close: Expr, fastk_period: int = 5, slowk_period: int = 3, slowk_matype: int = 0, slowd_period: int = 3, slowd_matype: int = 0) -> Expr:  # ['slowk', 'slowd']
     """STOCH(ndarray high, ndarray low, ndarray close, int fastk_period=-0x80000000, int slowk_period=-0x80000000, int slowk_matype=0, int slowd_period=-0x80000000, int slowd_matype=0)
 
 STOCH(high, low, close[, fastk_period=?, slowk_period=?, slowk_matype=?, slowd_period=?, slowd_matype=?])
@@ -891,7 +907,7 @@ Outputs:
     return struct(f0=high, f1=low, f2=close).map_batches(lambda xx: batches_i2_o2(struct_to_numpy(xx, 3, dtype=float), _ta.STOCH, fastk_period, slowk_period, slowk_matype, slowd_period, slowd_matype), return_dtype=dtype)
 
 
-def STOCHF(high: Expr, low: Expr, close: Expr, fastk_period: float = 5.0, fastd_period: float = 3.0, fastd_matype: float = 0.0) -> Expr:  # ['fastk', 'fastd']
+def STOCHF(high: Expr, low: Expr, close: Expr, fastk_period: int = 5, fastd_period: int = 3, fastd_matype: int = 0) -> Expr:  # ['fastk', 'fastd']
     """STOCHF(ndarray high, ndarray low, ndarray close, int fastk_period=-0x80000000, int fastd_period=-0x80000000, int fastd_matype=0)
 
 STOCHF(high, low, close[, fastk_period=?, fastd_period=?, fastd_matype=?])
@@ -911,7 +927,7 @@ Outputs:
     return struct(f0=high, f1=low, f2=close).map_batches(lambda xx: batches_i2_o2(struct_to_numpy(xx, 3, dtype=float), _ta.STOCHF, fastk_period, fastd_period, fastd_matype), return_dtype=dtype)
 
 
-def STOCHRSI(close: Expr, timeperiod: float = 14.0, fastk_period: float = 5.0, fastd_period: float = 3.0, fastd_matype: float = 0.0) -> Expr:  # ['fastk', 'fastd']
+def STOCHRSI(close: Expr, timeperiod: int = 14, fastk_period: int = 5, fastd_period: int = 3, fastd_matype: int = 0) -> Expr:  # ['fastk', 'fastd']
     """STOCHRSI(ndarray real, int timeperiod=-0x80000000, int fastk_period=-0x80000000, int fastd_period=-0x80000000, int fastd_matype=0)
 
 STOCHRSI(real[, timeperiod=?, fastk_period=?, fastd_period=?, fastd_matype=?])
@@ -932,7 +948,7 @@ Outputs:
     return close.map_batches(lambda x1: batches_i1_o2(x1.to_numpy().astype(float), _ta.STOCHRSI, timeperiod, fastk_period, fastd_period, fastd_matype), return_dtype=dtype)
 
 
-def TRIX(close: Expr, timeperiod: float = 30.0) -> Expr:  # ['real']
+def TRIX(close: Expr, timeperiod: int = 30) -> Expr:  # ['real']
     """TRIX(ndarray real, int timeperiod=-0x80000000)
 
 TRIX(real[, timeperiod=?])
@@ -948,7 +964,7 @@ Outputs:
     return close.map_batches(lambda x1: batches_i1_o1(x1.to_numpy().astype(float), _ta.TRIX, timeperiod), return_dtype=Float64)
 
 
-def ULTOSC(high: Expr, low: Expr, close: Expr, timeperiod1: float = 7.0, timeperiod2: float = 14.0, timeperiod3: float = 28.0) -> Expr:  # ['real']
+def ULTOSC(high: Expr, low: Expr, close: Expr, timeperiod1: int = 7, timeperiod2: int = 14, timeperiod3: int = 28) -> Expr:  # ['real']
     """ULTOSC(ndarray high, ndarray low, ndarray close, int timeperiod1=-0x80000000, int timeperiod2=-0x80000000, int timeperiod3=-0x80000000)
 
 ULTOSC(high, low, close[, timeperiod1=?, timeperiod2=?, timeperiod3=?])
@@ -966,7 +982,7 @@ Outputs:
     return struct(f0=high, f1=low, f2=close).map_batches(lambda xx: batches_i2_o1(struct_to_numpy(xx, 3, dtype=float), _ta.ULTOSC, timeperiod1, timeperiod2, timeperiod3), return_dtype=Float64)
 
 
-def WILLR(high: Expr, low: Expr, close: Expr, timeperiod: float = 14.0) -> Expr:  # ['real']
+def WILLR(high: Expr, low: Expr, close: Expr, timeperiod: int = 14) -> Expr:  # ['real']
     """WILLR(ndarray high, ndarray low, ndarray close, int timeperiod=-0x80000000)
 
 WILLR(high, low, close[, timeperiod=?])
@@ -982,7 +998,26 @@ Outputs:
     return struct(f0=high, f1=low, f2=close).map_batches(lambda xx: batches_i2_o1(struct_to_numpy(xx, 3, dtype=float), _ta.WILLR, timeperiod), return_dtype=Float64)
 
 
-def BBANDS(close: Expr, timeperiod: float = 5.0, nbdevup: float = 2.0, nbdevdn: float = 2.0, matype: float = 0.0) -> Expr:  # ['upperband', 'middleband', 'lowerband']
+def ACCBANDS(high: Expr, low: Expr, close: Expr, timeperiod: int = 20) -> Expr:  # ['upperband', 'middleband', 'lowerband']
+    """ACCBANDS(ndarray high, ndarray low, ndarray close, int timeperiod=-0x80000000)
+
+ACCBANDS(high, low, close[, timeperiod=?])
+
+Acceleration Bands (Overlap Studies)
+
+Inputs:
+    prices: ['high', 'low', 'close']
+Parameters:
+    timeperiod: 20
+Outputs:
+    upperband
+    middleband
+    lowerband"""
+    dtype = Struct([Field(f"column_{i}", Float64) for i in range(3)])
+    return struct(f0=high, f1=low, f2=close).map_batches(lambda xx: batches_i2_o2(struct_to_numpy(xx, 3, dtype=float), _ta.ACCBANDS, timeperiod), return_dtype=dtype)
+
+
+def BBANDS(close: Expr, timeperiod: int = 5, nbdevup: float = 2.0, nbdevdn: float = 2.0, matype: int = 0) -> Expr:  # ['upperband', 'middleband', 'lowerband']
     """BBANDS(ndarray real, int timeperiod=-0x80000000, double nbdevup=-4e37, double nbdevdn=-4e37, int matype=0)
 
 BBANDS(real[, timeperiod=?, nbdevup=?, nbdevdn=?, matype=?])
@@ -1004,7 +1039,7 @@ Outputs:
     return close.map_batches(lambda x1: batches_i1_o2(x1.to_numpy().astype(float), _ta.BBANDS, timeperiod, nbdevup, nbdevdn, matype), return_dtype=dtype)
 
 
-def DEMA(close: Expr, timeperiod: float = 30.0) -> Expr:  # ['real']
+def DEMA(close: Expr, timeperiod: int = 30) -> Expr:  # ['real']
     """DEMA(ndarray real, int timeperiod=-0x80000000)
 
 DEMA(real[, timeperiod=?])
@@ -1020,7 +1055,7 @@ Outputs:
     return close.map_batches(lambda x1: batches_i1_o1(x1.to_numpy().astype(float), _ta.DEMA, timeperiod), return_dtype=Float64)
 
 
-def EMA(close: Expr, timeperiod: float = 30.0) -> Expr:  # ['real']
+def EMA(close: Expr, timeperiod: int = 30) -> Expr:  # ['real']
     """EMA(ndarray real, int timeperiod=-0x80000000)
 
 EMA(real[, timeperiod=?])
@@ -1050,7 +1085,7 @@ Outputs:
     return close.map_batches(lambda x1: batches_i1_o1(x1.to_numpy().astype(float), _ta.HT_TRENDLINE), return_dtype=Float64)
 
 
-def KAMA(close: Expr, timeperiod: float = 30.0) -> Expr:  # ['real']
+def KAMA(close: Expr, timeperiod: int = 30) -> Expr:  # ['real']
     """KAMA(ndarray real, int timeperiod=-0x80000000)
 
 KAMA(real[, timeperiod=?])
@@ -1066,7 +1101,7 @@ Outputs:
     return close.map_batches(lambda x1: batches_i1_o1(x1.to_numpy().astype(float), _ta.KAMA, timeperiod), return_dtype=Float64)
 
 
-def MA(close: Expr, timeperiod: float = 30.0, matype: float = 0.0) -> Expr:  # ['real']
+def MA(close: Expr, timeperiod: int = 30, matype: int = 0) -> Expr:  # ['real']
     """MA(ndarray real, int timeperiod=-0x80000000, int matype=0)
 
 MA(real[, timeperiod=?, matype=?])
@@ -1102,7 +1137,7 @@ Outputs:
     return close.map_batches(lambda x1: batches_i1_o2(x1.to_numpy().astype(float), _ta.MAMA, fastlimit, slowlimit), return_dtype=dtype)
 
 
-def MAVP(close: Expr, periods: Expr, minperiod: float = 2.0, maxperiod: float = 30.0, matype: float = 0.0) -> Expr:  # ['real']
+def MAVP(close: Expr, periods: Expr, minperiod: int = 2, maxperiod: int = 30, matype: int = 0) -> Expr:  # ['real']
     """MAVP(ndarray real, ndarray periods, int minperiod=-0x80000000, int maxperiod=-0x80000000, int matype=0)
 
 MAVP(real, periods[, minperiod=?, maxperiod=?, matype=?])
@@ -1121,7 +1156,7 @@ Outputs:
     return struct(f0=close, f1=periods).map_batches(lambda xx: batches_i2_o1(struct_to_numpy(xx, 2, dtype=float), _ta.MAVP, minperiod, maxperiod, matype), return_dtype=Float64)
 
 
-def MIDPOINT(close: Expr, timeperiod: float = 14.0) -> Expr:  # ['real']
+def MIDPOINT(close: Expr, timeperiod: int = 14) -> Expr:  # ['real']
     """MIDPOINT(ndarray real, int timeperiod=-0x80000000)
 
 MIDPOINT(real[, timeperiod=?])
@@ -1137,7 +1172,7 @@ Outputs:
     return close.map_batches(lambda x1: batches_i1_o1(x1.to_numpy().astype(float), _ta.MIDPOINT, timeperiod), return_dtype=Float64)
 
 
-def MIDPRICE(high: Expr, low: Expr, timeperiod: float = 14.0) -> Expr:  # ['real']
+def MIDPRICE(high: Expr, low: Expr, timeperiod: int = 14) -> Expr:  # ['real']
     """MIDPRICE(ndarray high, ndarray low, int timeperiod=-0x80000000)
 
 MIDPRICE(high, low[, timeperiod=?])
@@ -1193,7 +1228,7 @@ Outputs:
     return struct(f0=high, f1=low).map_batches(lambda xx: batches_i2_o1(struct_to_numpy(xx, 2, dtype=float), _ta.SAREXT, startvalue, offsetonreverse, accelerationinitlong, accelerationlong, accelerationmaxlong, accelerationinitshort, accelerationshort, accelerationmaxshort), return_dtype=Float64)
 
 
-def SMA(close: Expr, timeperiod: float = 30.0) -> Expr:  # ['real']
+def SMA(close: Expr, timeperiod: int = 30) -> Expr:  # ['real']
     """SMA(ndarray real, int timeperiod=-0x80000000)
 
 SMA(real[, timeperiod=?])
@@ -1209,7 +1244,7 @@ Outputs:
     return close.map_batches(lambda x1: batches_i1_o1(x1.to_numpy().astype(float), _ta.SMA, timeperiod), return_dtype=Float64)
 
 
-def T3(close: Expr, timeperiod: float = 5.0, vfactor: float = 0.7) -> Expr:  # ['real']
+def T3(close: Expr, timeperiod: int = 5, vfactor: float = 0.7) -> Expr:  # ['real']
     """T3(ndarray real, int timeperiod=-0x80000000, double vfactor=-4e37)
 
 T3(real[, timeperiod=?, vfactor=?])
@@ -1226,7 +1261,7 @@ Outputs:
     return close.map_batches(lambda x1: batches_i1_o1(x1.to_numpy().astype(float), _ta.T3, timeperiod, vfactor), return_dtype=Float64)
 
 
-def TEMA(close: Expr, timeperiod: float = 30.0) -> Expr:  # ['real']
+def TEMA(close: Expr, timeperiod: int = 30) -> Expr:  # ['real']
     """TEMA(ndarray real, int timeperiod=-0x80000000)
 
 TEMA(real[, timeperiod=?])
@@ -1242,7 +1277,7 @@ Outputs:
     return close.map_batches(lambda x1: batches_i1_o1(x1.to_numpy().astype(float), _ta.TEMA, timeperiod), return_dtype=Float64)
 
 
-def TRIMA(close: Expr, timeperiod: float = 30.0) -> Expr:  # ['real']
+def TRIMA(close: Expr, timeperiod: int = 30) -> Expr:  # ['real']
     """TRIMA(ndarray real, int timeperiod=-0x80000000)
 
 TRIMA(real[, timeperiod=?])
@@ -1258,7 +1293,7 @@ Outputs:
     return close.map_batches(lambda x1: batches_i1_o1(x1.to_numpy().astype(float), _ta.TRIMA, timeperiod), return_dtype=Float64)
 
 
-def WMA(close: Expr, timeperiod: float = 30.0) -> Expr:  # ['real']
+def WMA(close: Expr, timeperiod: int = 30) -> Expr:  # ['real']
     """WMA(ndarray real, int timeperiod=-0x80000000)
 
 WMA(real[, timeperiod=?])
@@ -2142,6 +2177,22 @@ Outputs:
     return struct(f0=open, f1=high, f2=low, f3=close).map_batches(lambda xx: batches_i2_o1(struct_to_numpy(xx, 4, dtype=float), _ta.CDLXSIDEGAP3METHODS), return_dtype=Int32)
 
 
+def AVGDEV(close: Expr, timeperiod: int = 14) -> Expr:  # ['real']
+    """AVGDEV(ndarray real, int timeperiod=-0x80000000)
+
+AVGDEV(real[, timeperiod=?])
+
+Average Deviation (Price Transform)
+
+Inputs:
+    real: (any ndarray)
+Parameters:
+    timeperiod: 14
+Outputs:
+    real"""
+    return close.map_batches(lambda x1: batches_i1_o1(x1.to_numpy().astype(float), _ta.AVGDEV, timeperiod), return_dtype=Float64)
+
+
 def AVGPRICE(open: Expr, high: Expr, low: Expr, close: Expr) -> Expr:  # ['real']
     """AVGPRICE(ndarray open, ndarray high, ndarray low, ndarray close)
 
@@ -2198,7 +2249,7 @@ Outputs:
     return struct(f0=high, f1=low, f2=close).map_batches(lambda xx: batches_i2_o1(struct_to_numpy(xx, 3, dtype=float), _ta.WCLPRICE), return_dtype=Float64)
 
 
-def BETA(high: Expr, low: Expr, timeperiod: float = 5.0) -> Expr:  # ['real']
+def BETA(high: Expr, low: Expr, timeperiod: int = 5) -> Expr:  # ['real']
     """BETA(ndarray real0, ndarray real1, int timeperiod=-0x80000000)
 
 BETA(real0, real1[, timeperiod=?])
@@ -2215,7 +2266,7 @@ Outputs:
     return struct(f0=high, f1=low).map_batches(lambda xx: batches_i2_o1(struct_to_numpy(xx, 2, dtype=float), _ta.BETA, timeperiod), return_dtype=Float64)
 
 
-def CORREL(high: Expr, low: Expr, timeperiod: float = 30.0) -> Expr:  # ['real']
+def CORREL(high: Expr, low: Expr, timeperiod: int = 30) -> Expr:  # ['real']
     """CORREL(ndarray real0, ndarray real1, int timeperiod=-0x80000000)
 
 CORREL(real0, real1[, timeperiod=?])
@@ -2232,7 +2283,7 @@ Outputs:
     return struct(f0=high, f1=low).map_batches(lambda xx: batches_i2_o1(struct_to_numpy(xx, 2, dtype=float), _ta.CORREL, timeperiod), return_dtype=Float64)
 
 
-def LINEARREG(close: Expr, timeperiod: float = 14.0) -> Expr:  # ['real']
+def LINEARREG(close: Expr, timeperiod: int = 14) -> Expr:  # ['real']
     """LINEARREG(ndarray real, int timeperiod=-0x80000000)
 
 LINEARREG(real[, timeperiod=?])
@@ -2248,7 +2299,7 @@ Outputs:
     return close.map_batches(lambda x1: batches_i1_o1(x1.to_numpy().astype(float), _ta.LINEARREG, timeperiod), return_dtype=Float64)
 
 
-def LINEARREG_ANGLE(close: Expr, timeperiod: float = 14.0) -> Expr:  # ['real']
+def LINEARREG_ANGLE(close: Expr, timeperiod: int = 14) -> Expr:  # ['real']
     """LINEARREG_ANGLE(ndarray real, int timeperiod=-0x80000000)
 
 LINEARREG_ANGLE(real[, timeperiod=?])
@@ -2264,7 +2315,7 @@ Outputs:
     return close.map_batches(lambda x1: batches_i1_o1(x1.to_numpy().astype(float), _ta.LINEARREG_ANGLE, timeperiod), return_dtype=Float64)
 
 
-def LINEARREG_INTERCEPT(close: Expr, timeperiod: float = 14.0) -> Expr:  # ['real']
+def LINEARREG_INTERCEPT(close: Expr, timeperiod: int = 14) -> Expr:  # ['real']
     """LINEARREG_INTERCEPT(ndarray real, int timeperiod=-0x80000000)
 
 LINEARREG_INTERCEPT(real[, timeperiod=?])
@@ -2280,7 +2331,7 @@ Outputs:
     return close.map_batches(lambda x1: batches_i1_o1(x1.to_numpy().astype(float), _ta.LINEARREG_INTERCEPT, timeperiod), return_dtype=Float64)
 
 
-def LINEARREG_SLOPE(close: Expr, timeperiod: float = 14.0) -> Expr:  # ['real']
+def LINEARREG_SLOPE(close: Expr, timeperiod: int = 14) -> Expr:  # ['real']
     """LINEARREG_SLOPE(ndarray real, int timeperiod=-0x80000000)
 
 LINEARREG_SLOPE(real[, timeperiod=?])
@@ -2296,7 +2347,7 @@ Outputs:
     return close.map_batches(lambda x1: batches_i1_o1(x1.to_numpy().astype(float), _ta.LINEARREG_SLOPE, timeperiod), return_dtype=Float64)
 
 
-def STDDEV(close: Expr, timeperiod: float = 5.0, nbdev: float = 1.0) -> Expr:  # ['real']
+def STDDEV(close: Expr, timeperiod: int = 5, nbdev: float = 1.0) -> Expr:  # ['real']
     """STDDEV(ndarray real, int timeperiod=-0x80000000, double nbdev=-4e37)
 
 STDDEV(real[, timeperiod=?, nbdev=?])
@@ -2313,7 +2364,7 @@ Outputs:
     return close.map_batches(lambda x1: batches_i1_o1(x1.to_numpy().astype(float), _ta.STDDEV, timeperiod, nbdev), return_dtype=Float64)
 
 
-def TSF(close: Expr, timeperiod: float = 14.0) -> Expr:  # ['real']
+def TSF(close: Expr, timeperiod: int = 14) -> Expr:  # ['real']
     """TSF(ndarray real, int timeperiod=-0x80000000)
 
 TSF(real[, timeperiod=?])
@@ -2329,7 +2380,7 @@ Outputs:
     return close.map_batches(lambda x1: batches_i1_o1(x1.to_numpy().astype(float), _ta.TSF, timeperiod), return_dtype=Float64)
 
 
-def VAR(close: Expr, timeperiod: float = 5.0, nbdev: float = 1.0) -> Expr:  # ['real']
+def VAR(close: Expr, timeperiod: int = 5, nbdev: float = 1.0) -> Expr:  # ['real']
     """VAR(ndarray real, int timeperiod=-0x80000000, double nbdev=-4e37)
 
 VAR(real[, timeperiod=?, nbdev=?])
@@ -2346,7 +2397,7 @@ Outputs:
     return close.map_batches(lambda x1: batches_i1_o1(x1.to_numpy().astype(float), _ta.VAR, timeperiod, nbdev), return_dtype=Float64)
 
 
-def ATR(high: Expr, low: Expr, close: Expr, timeperiod: float = 14.0) -> Expr:  # ['real']
+def ATR(high: Expr, low: Expr, close: Expr, timeperiod: int = 14) -> Expr:  # ['real']
     """ATR(ndarray high, ndarray low, ndarray close, int timeperiod=-0x80000000)
 
 ATR(high, low, close[, timeperiod=?])
@@ -2362,7 +2413,7 @@ Outputs:
     return struct(f0=high, f1=low, f2=close).map_batches(lambda xx: batches_i2_o1(struct_to_numpy(xx, 3, dtype=float), _ta.ATR, timeperiod), return_dtype=Float64)
 
 
-def NATR(high: Expr, low: Expr, close: Expr, timeperiod: float = 14.0) -> Expr:  # ['real']
+def NATR(high: Expr, low: Expr, close: Expr, timeperiod: int = 14) -> Expr:  # ['real']
     """NATR(ndarray high, ndarray low, ndarray close, int timeperiod=-0x80000000)
 
 NATR(high, low, close[, timeperiod=?])
@@ -2406,7 +2457,7 @@ Outputs:
     return struct(f0=high, f1=low, f2=close, f3=volume).map_batches(lambda xx: batches_i2_o1(struct_to_numpy(xx, 4, dtype=float), _ta.AD), return_dtype=Float64)
 
 
-def ADOSC(high: Expr, low: Expr, close: Expr, volume: Expr, fastperiod: float = 3.0, slowperiod: float = 10.0) -> Expr:  # ['real']
+def ADOSC(high: Expr, low: Expr, close: Expr, volume: Expr, fastperiod: int = 3, slowperiod: int = 10) -> Expr:  # ['real']
     """ADOSC(ndarray high, ndarray low, ndarray close, ndarray volume, int fastperiod=-0x80000000, int slowperiod=-0x80000000)
 
 ADOSC(high, low, close, volume[, fastperiod=?, slowperiod=?])

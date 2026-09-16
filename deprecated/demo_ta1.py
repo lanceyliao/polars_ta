@@ -6,7 +6,9 @@ expr.ta.func
 """
 import polars as pl
 
-from polars_ta.utils.helper import TaLibHelper  # noqa
+from helper import TaLibHelper  # noqa
+# from polars_ta.utils.helper import TaLibHelper  # noqa
+pl.Config.set_tbl_cols(100)
 
 df = pl.DataFrame(
     {

@@ -6,7 +6,9 @@ func(expr)
 """
 import polars as pl
 
-from polars_ta.utils.wrapper import init
+from wrapper import init
+# from polars_ta.utils.wrapper import init
+pl.Config.set_tbl_cols(100)
 
 df = pl.DataFrame(
     {

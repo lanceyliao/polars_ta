@@ -1,14 +1,30 @@
 """
-Parse talib functions for polars Expressions
+TA-Lib 函数代码生成器
 
-This version is more direct, without skip nan values, and without input and output checks
+本脚本的主要功能是将 TA-Lib 的所有函数自动封装成适合 polars 表达式使用的版本
 
-polars does not skip nan values as well. It should be processed by specific functions
+设计目的：
+1. 自动遍历 TA-Lib 中的所有函数
+2. 根据函数的输入输出数量，生成对应的包装代码
+3. 生成的代码可以直接在 polars 表达式中使用，如 BBANDS(pl.col('A'), timeperiod=20)
+4. 使用 numba 加速的批处理函数提高性能
 
-本脚本主要功能是将talib封装成更适合表达式的版本
+与 wrapper.py 的区别：
+- wrapper.py: 运行时动态生成函数，使用装饰器模式
+- codegen_talib.py: 编译时生成静态代码，直接写入文件
+- 本版本调用更直接，没有 skip_nan 等复杂逻辑
+- 跳过空值等操作统一交给底层的 numba 函数处理
 
-与另一版本的区别是这版本调用更直接，没有跳过空的操作，也没有输入与输出数量的判断工作
-跳过空值等操作与polars样都不做，以后准备统一交给函数处理
+生成的代码特点：
+1. 支持单输入单输出 (i1_o1)
+2. 支持单输入多输出 (i1_o2)
+3. 支持多输入单输出 (i2_o1)
+4. 支持多输入多输出 (i2_o2)
+5. 使用 polars 的 map_batches 进行批处理
+6. 使用 numba 加速的底层函数
+
+使用方法：
+运行此脚本会生成 polars_ta/talib/__init__.py 文件
 """
 import talib as _talib
 from talib import abstract as _abstract
@@ -17,67 +33,131 @@ from tools.prefix import save
 
 
 def _codegen_func(name, input_names, parameters, output_names, doc):
+    """
+    为单个 TA-Lib 函数生成包装代码
+
+    根据函数的输入输出数量，选择不同的代码模板：
+    - tpl11: 单输入单输出 (1 input, 1 output)
+    - tpl12: 单输入多输出 (1 input, 2+ outputs)
+    - tpl21: 多输入单输出 (2+ inputs, 1 output)
+    - tpl22: 多输入多输出 (2+ inputs, 2+ outputs)
+
+    Parameters
+    ----------
+    name : str
+        函数名称，如 'BBANDS'
+    input_names : list of str
+        输入参数名称列表，如 ['high', 'low', 'close']
+    parameters : dict
+        函数参数字典，如 {'timeperiod': 20, 'nbdevup': 2}
+    output_names : list of str
+        输出参数名称列表，如 ['upperband', 'middleband', 'lowerband']
+    doc : str
+        函数的文档字符串
+
+    Returns
+    -------
+    str
+        生成的 Python 代码字符串
+
+    """
+    # 定义四种代码模板
+    # tpl11: 单输入单输出
     tpl11 = """
 def {name}({aa}) -> Expr:  # {output_names}
     \"\"\"{doc}\"\"\"
     return {bb}.map_batches(lambda x1: batches_i1_o1(x1.to_numpy().astype(float), {cc}), return_dtype={return_dtype})
 """
+    # tpl12: 单输入多输出（返回 struct）
     tpl12 = """
 def {name}({aa}) -> Expr:  # {output_names}
     \"\"\"{doc}\"\"\"
     dtype = Struct([Field(f"column_{{i}}", Float64) for i in range({ee})])
     return {bb}.map_batches(lambda x1: batches_i1_o2(x1.to_numpy().astype(float), {cc}), return_dtype=dtype)
 """
+    # tpl21: 多输入单输出
     tpl21 = """
 def {name}({aa}) -> Expr:  # {output_names}
     \"\"\"{doc}\"\"\"
     return struct({bb}).map_batches(lambda xx: batches_i2_o1(struct_to_numpy(xx, {dd}, dtype=float), {cc}), return_dtype={return_dtype})
 """
+    # tpl22: 多输入多输出（返回 struct）
     tpl22 = """
 def {name}({aa}) -> Expr:  # {output_names}
     \"\"\"{doc}\"\"\"
     dtype = Struct([Field(f"column_{{i}}", Float64) for i in range({ee})])
     return struct({bb}).map_batches(lambda xx: batches_i2_o2(struct_to_numpy(xx, {dd}, dtype=float), {cc}), return_dtype=dtype)
 """
+
+    # 处理特殊情况：如果输出数量超过42，添加 ret_idx 参数
+    # 这是 TA-Lib 的一个特殊限制，某些函数输出过多时需要指定返回哪个
     if len(output_names) > 42:
         extra_args = {'ret_idx': len(output_names) - 1}
     else:
         extra_args = {}
-    a1 = [f'{name}: Expr' for name in input_names]
-    a2 = [f'{k}: {type(v).__name__} = {v}' for k, v in parameters.items()]
-    a3 = [f'{k}: {type(v).__name__} = {v}' for k, v in extra_args.items()]
-    aa = ', '.join(a1 + a2 + a3)
 
+    # 构建函数参数列表
+    a1 = [f'{name}: Expr' for name in input_names]  # polars 表达式参数
+    a2 = [f'{k}: {type(v).__name__} = {v}' for k, v in parameters.items()]  # 函数参数
+    a3 = [f'{k}: {type(v).__name__} = {v}' for k, v in extra_args.items()]  # 额外参数
+    aa = ', '.join(a1 + a2 + a3)  # 合并所有参数
+
+    # 构建表达式参数（用于 struct 调用）
     bb = ', '.join(input_names)
     if len(input_names) > 1:
+        # 多输入时，使用命名参数 f0=high, f1=low, f2=close
         bb = [f'f{i}={arg}' for i, arg in enumerate(input_names)]
         bb = ', '.join(bb)
 
-    c1 = [f'_ta.{name}']
+    # 构建调用 TA-Lib 函数的参数
+    c1 = [f'_ta.{name}']  # 函数名
     if len(parameters) > 0:
-        c2 = [f'{k}' for k, v in parameters.items()]
+        c2 = [f'{k}' for k, v in parameters.items()]  # 参数值
     else:
         c2 = []
 
-    c3 = [f'{k}={k}' for k, v in extra_args.items()]
-    cc = ', '.join(c1 + c2 + c3)
+    c3 = [f'{k}={k}' for k, v in extra_args.items()]  # 额外参数（关键字参数）
+    cc = ', '.join(c1 + c2 + c3)  # 合并所有调用参数
 
+    # 确定返回数据类型
     if output_names[0] == 'integer':
         return_dtype = 'Int32'
     else:
         return_dtype = 'Float64'
 
+    # 根据输入输出数量选择对应的模板
     if len(input_names) == 1 and len(output_names) == 1:
+        # 单输入单输出
         return tpl11.format(name=name, aa=aa, bb=bb, cc=cc, dd=len(input_names), ee=len(output_names), output_names=output_names, doc=doc, return_dtype=return_dtype)
     elif len(input_names) == 1 and len(output_names) > 1:
+        # 单输入多输出
         return tpl12.format(name=name, aa=aa, bb=bb, cc=cc, dd=len(input_names), ee=len(output_names), output_names=output_names, doc=doc)
     elif len(input_names) > 1 and len(output_names) == 1:
+        # 多输入单输出
         return tpl21.format(name=name, aa=aa, bb=bb, cc=cc, dd=len(input_names), ee=len(output_names), output_names=output_names, doc=doc, return_dtype=return_dtype)
     else:
+        # 多输入多输出
         return tpl22.format(name=name, aa=aa, bb=bb, cc=cc, dd=len(input_names), ee=len(output_names), output_names=output_names, doc=doc)
 
 
 def codegen():
+    """
+    主代码生成函数，遍历所有 TA-Lib 函数并生成包装代码
+
+    工作流程：
+    1. 生成文件头部（导入语句）
+    2. 遍历 TA-Lib 中的所有函数
+    3. 对每个函数提取元数据（名称、输入、输出、参数）
+    4. 调用 _codegen_func 生成对应的包装代码
+    5. 将所有代码收集到列表中返回
+
+    Returns
+    -------
+    list of str
+        生成的所有函数代码字符串列表
+
+    """
+    # 生成文件头部，包含必要的导入语句
     head_v2 = """# generated by codegen_talib.py
 import talib as _ta
 from polars import Expr, struct, Struct, Field, Float64, Int32
@@ -85,26 +165,53 @@ from polars import Expr, struct, Struct, Field, Float64, Int32
 from polars_ta.utils.numba_ import batches_i1_o1, batches_i1_o2, batches_i2_o1, batches_i2_o2, struct_to_numpy
 """
 
-    txts = [head_v2]
+    txts = [head_v2]  # 从头部开始构建代码列表
+
+    # 遍历 TA-Lib 中的所有函数
     for i, func_name in enumerate(_talib.get_functions()):
         """talib遍历"""
+        # 获取函数的元数据信息
         info = _abstract.Function(func_name).info
 
+        # 提取函数名称
         name = info['name']
+
+        # 提取输入参数名称
+        # info['input_names'] 是一个字典，可能包含列表或单个值
+        # 例如：{'prices': ['high', 'low', 'close']} 或 {'price': 'close'}
         input_names = []
         for in_names in info['input_names'].values():
             if isinstance(in_names, (list, tuple)):
-                input_names.extend(list(in_names))
+                input_names.extend(list(in_names))  # 处理多个输入
             else:
-                input_names.append(in_names)
+                input_names.append(in_names)  # 处理单个输入
+
+        # 提取函数参数（如 timeperiod, nbdevup 等）
         parameters = info['parameters']
+
+        # 提取输出参数名称
         output_names = info['output_names']
-        txt = _codegen_func(name, input_names, parameters, output_names, getattr(_talib, name).__doc__)
+
+        # 获取原始函数的文档字符串
+        doc = getattr(_talib, name).__doc__
+
+        # 为该函数生成包装代码
+        txt = _codegen_func(name, input_names, parameters, output_names, doc)
         txts.append(txt)
 
     return txts
 
 
 if __name__ == '__main__':
+    """
+    主程序入口
+
+    当直接运行此脚本时：
+    1. 调用 codegen() 生成所有 TA-Lib 函数的包装代码
+    2. 调用 save() 将生成的代码写入到 polars_ta/talib/__init__.py 文件
+
+    使用方法：
+    python tools/codegen_talib.py
+    """
     txts = codegen()
     save(txts, module='polars_ta.talib', write=True)
