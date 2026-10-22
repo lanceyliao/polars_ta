@@ -67,7 +67,8 @@ def ts_arg_max(x: Expr, d: int = 5, reverse: bool = True, min_samples: Optional[
 
     """
     minp = min_samples or polars_ta.MIN_SAMPLES or d
-    return x.map_batches(lambda x1: batches_i1_o1(x1.to_numpy(), roll_argmax, d, minp, reverse, dtype=UInt16), return_dtype=UInt16)
+    # 内部仍用 UInt16 索引；对外抬成 Float64，避免 20-ts_arg_max 在表达式图里被改写成 u16.negate()。
+    return x.map_batches(lambda x1: batches_i1_o1(x1.to_numpy(), roll_argmax, d, minp, reverse, dtype=UInt16), return_dtype=UInt16).cast(Float64)
 
 
 def ts_arg_min(x: Expr, d: int = 5, reverse: bool = True, min_samples: Optional[int] = None) -> Expr:
@@ -119,7 +120,7 @@ def ts_arg_min(x: Expr, d: int = 5, reverse: bool = True, min_samples: Optional[
 
     """
     minp = min_samples or polars_ta.MIN_SAMPLES or d
-    return x.map_batches(lambda x1: batches_i1_o1(x1.to_numpy(), roll_argmin, d, minp, reverse, dtype=UInt16), return_dtype=UInt16)
+    return x.map_batches(lambda x1: batches_i1_o1(x1.to_numpy(), roll_argmin, d, minp, reverse, dtype=UInt16), return_dtype=UInt16).cast(Float64)
 
 
 def ts_co_kurtosis(x: Expr, y: Expr, d: int = 5, ddof: int = 0, min_samples: Optional[int] = None) -> Expr:
@@ -562,7 +563,8 @@ def ts_decay_linear(x: Expr, d: int = 30, min_samples: Optional[int] = None) -> 
     # print(weights)
     # pyo3_runtime.PanicException: weights not yet supported on array with null values
     # null换成NaN就不报错了，再换回来
-    return x.fill_null(np.nan).rolling_mean(d, weights=weights, min_samples=minp).fill_nan(None)
+    # 比较式产出 bool 时先抬成 float，避免 fill_null(nan) 的 bool/float 歧义。
+    return x.cast(Float64).fill_null(np.nan).rolling_mean(d, weights=weights, min_samples=minp).fill_nan(None)
 
 
 def ts_delay(x: Expr, d: int = 1, fill_value: float = None) -> Expr:
